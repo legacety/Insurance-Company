@@ -14,7 +14,7 @@ local configDir = getWorkingDirectory() .. '\\config'
 local settingsPath = configDir .. '\\setinfo.json'
 local settings = {}
 
-local renderWindow = imgui.new.bool(false) -- всегда false при старте
+local renderWindow = imgui.new.bool(false) -- ГўГ±ГҐГЈГ¤Г  false ГЇГ°ГЁ Г±ГІГ Г°ГІГҐ
 
 local function loadSettings()
     local file = io.open(settingsPath, "r")
@@ -223,10 +223,10 @@ end
 
 function main()
     while not isSampAvailable() do wait(0) end
-    sampAddChatMessage("{00FF00}[GT]{FFFFFF} Скрипт загружен. Для активации используйте {00FF00}/gs",0xFFFFFF)
+    sampAddChatMessage("{00FF00}[GT]{FFFFFF} Г‘ГЄГ°ГЁГЇГІ Г§Г ГЈГ°ГіГ¦ГҐГ­. Г„Г«Гї Г ГЄГІГЁГўГ Г¶ГЁГЁ ГЁГ±ГЇГ®Г«ГјГ§ГіГ©ГІГҐ {00FF00}/gs",0xFFFFFF)
 
     sampRegisterChatCommand('gs',function()
-        renderWindow[0] = not renderWindow[0]  -- открытие/закрытие окна только командой
+        renderWindow[0] = not renderWindow[0]  -- Г®ГІГЄГ°Г»ГІГЁГҐ/Г§Г ГЄГ°Г»ГІГЁГҐ Г®ГЄГ­Г  ГІГ®Г«ГјГЄГ® ГЄГ®Г¬Г Г­Г¤Г®Г©
     end)
 
     while true do
@@ -240,9 +240,10 @@ end
 
 require("samp.events").onServerMessage = function(color,text)
     if use_autodoor then
-        if (text:find("У вас нет ключей от данного шлагбаума") or text:find("У вас нет ключей от этого шлагбаума!") or text:find("У вас нет ключей от этой двери!") or text:find("У вас нет ключей от данной двери") or text:find("У Вас нет доступа.")) then
+        if (text:find("Г“ ГўГ Г± Г­ГҐГІ ГЄГ«ГѕГ·ГҐГ© Г®ГІ Г¤Г Г­Г­Г®ГЈГ® ГёГ«Г ГЈГЎГ ГіГ¬Г ") or text:find("Г“ ГўГ Г± Г­ГҐГІ ГЄГ«ГѕГ·ГҐГ© Г®ГІ ГЅГІГ®ГЈГ® ГёГ«Г ГЈГЎГ ГіГ¬Г !") or text:find("Г“ ГўГ Г± Г­ГҐГІ ГЄГ«ГѕГ·ГҐГ© Г®ГІ ГЅГІГ®Г© Г¤ГўГҐГ°ГЁ!") or text:find("Г“ ГўГ Г± Г­ГҐГІ ГЄГ«ГѕГ·ГҐГ© Г®ГІ Г¤Г Г­Г­Г®Г© Г¤ГўГҐГ°ГЁ") or text:find("Г“ Г‚Г Г± Г­ГҐГІ Г¤Г®Г±ГІГіГЇГ .")) then
             return false
         end
     end
 end
+
 
