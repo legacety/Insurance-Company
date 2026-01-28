@@ -12,14 +12,15 @@ local activeTab = 1
 
 local Clicker  = imgui.new.bool(true)
 local Konvert  = imgui.new.bool(true)
-local TextDraw = imgui.new.bool(true)
 local Office = imgui.new.bool(true)
+local TextDraw = imgui.new.bool(true)
 local td = {94, 95, 96, 97}
+local TdClickDelay = imgui.new.int(300)
 
 local tabs = { 
-    {name = u8"Главная", icon = fa.HOUSE}, 
-    {name = u8"Функции СК", icon = fa.SCREWDRIVER_WRENCH}, 
-    {name = u8"Заработок", icon = fa.CIRCLE_DOLLAR_TO_SLOT} 
+    {name = u8"Р“Р»Р°РІРЅР°СЏ", icon = fa.HOUSE}, 
+    {name = u8"Р¤СѓРЅРєС†РёРё РЎРљ", icon = fa.SCREWDRIVER_WRENCH}, 
+    {name = u8"Р—Р°СЂР°Р±РѕС‚РѕРє СЃ РЎРљ", icon = fa.CIRCLE_DOLLAR_TO_SLOT} 
 }
 
 local function applyTheme()
@@ -54,8 +55,7 @@ imgui.OnFrame(function() return renderWindow[0] end, function()
     imgui.SetNextWindowSize(imgui.ImVec2(550, 450), imgui.Cond.FirstUseEver)
     local sw, sh = getScreenResolution()
     imgui.SetNextWindowPos(imgui.ImVec2(sw * 0.5, sh * 0.5), imgui.Cond.Appearing, imgui.ImVec2(0.5, 0.5))
-
-    if imgui.Begin(u8"SetVc Tools", renderWindow, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse) then
+    if imgui.Begin(u8"SetVc Tools", renderWindow, imgui.WindowFlags.NoResize, imgui.WindowFlags.NoCollapse) then
         imgui.BeginChild("LeftMenu", imgui.ImVec2(150, -1), true)
         for i, tab in ipairs(tabs) do
             if imgui.Button(tab.icon .. "  " .. tab.name, imgui.ImVec2(-1, 35)) then
@@ -63,21 +63,26 @@ imgui.OnFrame(function() return renderWindow[0] end, function()
             end
         end
         imgui.EndChild()
-
         imgui.SameLine()
         imgui.BeginChild("MainContent", imgui.ImVec2(-1, -1), true)
         if activeTab == 1 then
-            imgui.Text(u8"Добро пожаловать на главную вкладку")
-            imgui.Text(u8"Автор: legacy")
-            imgui.Text(u8"Версия 1.0")
-        elseif activeTab == 2 then
-            imgui.Text(u8"Настройки панели управления")
-            imgui.Checkbox(u8"Включить кликер", Clicker)
-            imgui.Checkbox(u8"Включить конвертер", Konvert)
-            imgui.Checkbox(u8"Включить клик по текстдрайвам", TextDraw)
-           imgui.Checkbox(u8"Включить автозаполнение документов", Office)
+            imgui.Text(u8"Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РЅР° РіР»Р°РІРЅСѓСЋ РІРєР»Р°РґРєСѓ")
+            imgui.Text(u8"РђРІС‚РѕСЂ: legacy")
+            imgui.Text(u8"Р’РµСЂСЃРёСЏ 1.0")
+elseif activeTab == 2 then
+    imgui.Text(u8"РќР°СЃС‚СЂРѕР№РєРё РїР°РЅРµР»Рё СѓРїСЂР°РІР»РµРЅРёСЏ")
+    imgui.Checkbox(u8"Р’РєР»СЋС‡РёС‚СЊ РєР»РёРєРµСЂ", Clicker)
+    imgui.Checkbox(u8"Р’РєР»СЋС‡РёС‚СЊ РєРѕРЅРІРµСЂС‚РµСЂ", Konvert)
+    imgui.Checkbox(u8"Р’РєР»СЋС‡РёС‚СЊ Р°РІС‚РѕР·Р°РїРѕР»РЅРµРЅРёРµ РґРѕРєСѓРјРµРЅС‚РѕРІ", Office)
+imgui.Checkbox(u8"Р’РєР»СЋС‡РёС‚СЊ РєР»РёРє РїРѕ С‚РµРєСЃС‚РґСЂР°Р№РІР°Рј", TextDraw)
+
+if TextDraw[0] then
+    imgui.Separator()
+    imgui.Text(u8"РќР°СЃС‚СЂРѕР№РєР° РєР»РёРєР° РїРѕ TextDraw")
+    imgui.SliderInt(u8"Р—Р°РґРµСЂР¶РєР° (РјСЃ)", TdClickDelay, 1, 500)
+end
         elseif activeTab == 3 then
-            imgui.Text(u8"Информация о скрипте")
+            imgui.Text(u8"РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРєСЂРёРїС‚Рµ")
         end
         imgui.EndChild()
         imgui.End()
@@ -90,7 +95,7 @@ function sampev.onShowTextDraw(id)
         if id == td_id then
             lua_thread.create(function()
                 for _, click_id in ipairs(td) do
-            wait(100)
+                    wait(TdClickDelay[0])
                     sampSendClickTextdraw(click_id)
                 end
             end)
@@ -99,9 +104,10 @@ function sampev.onShowTextDraw(id)
     end
 end
 
+
 function sampev.onShowDialog(id, style, title, button1, button2, text)
     if not Office[0] then return end
-    if title:find('{BFBBBA}Заполнение документа') then
+    if title:find('{BFBBBA}Р—Р°РїРѕР»РЅРµРЅРёРµ РґРѕРєСѓРјРµРЅС‚Р°') then
         sampSendDialogResponse(id, 1, nil, text:match('{ffff00}(.+)'))
         return false
     end
@@ -128,7 +134,7 @@ end
 
 function main()
     while not isSampAvailable() do wait(0) end
-    sampAddChatMessage("{00FFFF}[SetVc Tools] {FFFFFF}Загружен. Активация {00FFFF}/vc", 0xFFFFFF)
+    sampAddChatMessage("{00FFFF}[SetVc Tools] {FFFFFF}Р—Р°РіСЂСѓР¶РµРЅ. РђРєС‚РёРІР°С†РёСЏ {00FFFF}/vc", 0xFFFFFF)
     sampRegisterChatCommand("vc", function()
         renderWindow[0] = not renderWindow[0]
     end)
